@@ -1,6 +1,6 @@
-from random import randrange
+from random import randrange, choice
 from visual import tprint
-from monster import monster
+from monster import Monster
 
 class Room:
     def __init__(self, monster_prob=3, chest_prob=5):
@@ -9,6 +9,8 @@ class Room:
 
     def enter(self):
         if randrange(self.monster_prob) == 0:
-            #monster will spawn
+            type = choice(("slime", "skeleton", "ghost", ))
+            monster = Monster(type, randrange(1,5))
+            tprint(f"OH NO!\nA {type} guards this room! What do you want to do?")
+            
             pass
-        
