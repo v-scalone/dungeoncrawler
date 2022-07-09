@@ -5,6 +5,7 @@ from visual import tprint
 from monster import Monster
 from sys import exit
 
+
 class Player:
     def __init__(self, name, type="Human"):
         self.name = name
@@ -15,15 +16,18 @@ class Player:
         self.armor = None
         self.weapon = None
         self.strength = 2
-    
+
     def equip_weapon(self, new_weapon):
         self.weapon = new_weapon
-        tprint(f"You have equipped {self.weapon.type}!\nYour damage is now {self.strength + self.weapon.damage}!", color="green")
-    
+        tprint(
+            f"You have equipped {self.weapon.type}!\nYour damage is now {self.strength + self.weapon.damage}!",
+            color="green")
+
     def equip_armor(self, new_armor):
         self.armor = new_armor
-        tprint(f"You have equipped {self.armor.type} armor!\nYour armor level is now {self.armor.hits}!", color="green")
-
+        tprint(
+            f"You have equipped {self.armor.type} armor!\nYour armor level is now {self.armor.hits}!",
+            color="green")
 
     def lvl_up(self, xp_amt):
         self.xp += xp_amt
@@ -35,35 +39,41 @@ class Player:
 
     def fight(self, monster):
         tprint("You chose to fight!", color="magenta")
-        monster.hit(self, self.strength + self.weapon.damage)
+        if self.weapon:
+            monster.hit(self, self.strength + self.weapon.damage)
+        else:
+            monster.hit(self, self.strength)
 
-    def _take_damage(self, amount):
-        if self.armor:  #checks if player has armor
-            if self.armor.hits >= amount: #if player has enough armor to take all the hits, armor gets damaged
+    def take_damage(self, amount):
+        if self.armor:  # checks if player has armor
+            if self.armor.hits >= amount:  # if player has enough armor to take all the hits, armor gets damaged
                 for i in range(amount):
                     self.armor.hits -= 1
                     amount -= 1
-                if self.armor.hits == 0: #checks if armor is broken after fight
-                    self.armor = None 
-                    tprint(f"Oh no!\nYour armor broke in fight :(", color="red")
-            if self.armor.hits < amount:    #if player doesn't have enough armor to take all hits, armor gets used up
+                if self.armor.hits == 0:  # checks if armor is broken after fight
+                    self.armor = None
+                    tprint(
+                        f"Oh no!\nYour armor broke in fight :(", color="red")
+            if self.armor.hits < amount:  # if player doesn't have enough armor to take all hits, armor gets used up
                 for i in range(self.armor.hits):
                     self.armor.hits -= 1
-                    amount -= 1 
-                self.armor = None 
+                    amount -= 1
+                self.armor = None
                 tprint(f"Oh no!\nYour armor broke in fight :(", color="red")
-        if amount:  #this happens when armor got used up or if there was no armor, as amount will be 0 if armor took all the hits!
+        if amount:  # this happens when armor got used up or if there was no armor, as amount will be 0 if armor took all the hits!
             if self.hp > amount:
                 self.hp -= amount
-                tprint(f"You took a hit!\nYour remaining HP is: {self.hp}",color="red")
+                tprint(
+                    f"You took a hit!\nYour remaining HP is: {self.hp}",
+                    color="red")
             else:
                 tprint("You DIED!\nGAME OVER", color="red")
                 exit()
 
 
-
-sword = Weapon("sword", 3)
-p = Player("vic")
-p.equip_weapon(sword)
-m = Monster("Slime", 6, 10)
-p.fight(m)
+if __name__ == "__main__":
+    sword = Weapon("sword", 3)
+    p = Player("vic")
+    p.equip_weapon(sword)
+    m = Monster("Slime", 6, 10)
+    p.fight(m)
